@@ -15,6 +15,13 @@ import InputLabel from '@material-ui/core/InputLabel';
 const DialogActions = styled(MuiDialogActions)`
   &&& {
     padding: 1rem;
+    button {
+      min-width: 6rem;
+      margin-left: .5rem;
+      &.regular {
+        color: #666666;
+      }
+    }
   }
 `;
 
@@ -138,7 +145,7 @@ class EditDialog extends Component {
           </FormControl>
         </DialogContent>
         <DialogActions>
-          <Button variant="outlined" onClick={this.handleClose} color="default">
+          <Button variant="outlined" className="regular" onClick={this.handleClose}>
             Cancel
           </Button>
           {adding &&
