@@ -10,7 +10,8 @@ const Header = styled.div`
 `;
 
 const AddButtonWrapper = styled.div`
-  padding: 1rem;
+  padding-top: 1.2rem;
+  padding-left: 1.3rem;
 `;
 
 function PortfolioHeader({ total, onEdit }) {
