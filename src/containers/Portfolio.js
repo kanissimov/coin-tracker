@@ -1,63 +1,46 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import styled from 'styled-components';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
-import Button from '@material-ui/core/Button';
-import AddIcon from '@material-ui/icons/Add';
 import { fetchMeta } from '../actions/coins';
 import { fetchPrices } from '../actions/prices';
 import { addHolding, updateHolding, removeHolding } from '../actions/holdings';
-import { REFRESH_INTERVAL } from '../constants';
 import { round } from '../utils/misc';
-import TotalValue from '../components/TotalValue';
 import EditDialog from '../components/EditDialog';
 import HoldingsTable from '../components/HoldingsTable';
-
-const Container = styled(Grid).attrs({
-  container: true,
-})`
-  padding-top: 10vh;
-  justify-content: center;
-`;
-
-const Header = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-
-const AddButtonWrapper = styled.div`
-  padding: 1rem;
-`;
+import PortfolioHeader from '../components/PortfolioHeader';
+import PortfolioContainer from '../components/PortfolioContainer';
+import { REFRESH_INTERVAL } from '../constants';
 
 class Portfolio extends Component {
-  state = {
-    isEditing: false,
-    editValues: null,
-  };
+  state = { isEditing: false, editValues: null };
 
   handleEditOpen = (editValues = null) => {
     this.setState({ editValues, isEditing: true });
   };
 
   handleEditCancel = () => {
-    this.setState({ isEditing: false, editValues: null });
+    this.clearState();
   };
 
   handleAdd = (params) => {
     this.props.addHolding(params);
-    this.setState({ isEditing: false, editValues: null });
+    this.clearState();
   };
 
   handleUpdate = (params) => {
     this.props.updateHolding(params);
-    this.setState({ isEditing: false, editValues: null });
+    this.clearState();
   };
 
   handleRemove = (symbol) => {
     this.props.removeHolding(symbol);
-    this.setState({ isEditing: false, editValues: null });
+    this.clearState();
   };
+
+  clearState = () => {
+    this.setState({ isEditing: false, editValues: null });
+  }
 
   componentDidMount() {
     this.props.fetchMeta();
@@ -81,7 +64,7 @@ class Portfolio extends Component {
     const coinOptions = Object.keys(coins)
       .map(key => ({ label: `${key} - ${coins[key].name}`, value: key }));
     return (
-      <Container>
+      <PortfolioContainer>
         <EditDialog
           open={this.state.isEditing}
           values={this.state.editValues}
@@ -93,14 +76,7 @@ class Portfolio extends Component {
         />
         <Grid item>
           <Paper>
-            <Header>
-              <AddButtonWrapper>
-                <Button onClick={() => this.handleEditOpen()} variant="fab" mini color="default">
-                  <AddIcon />
-                </Button>
-              </AddButtonWrapper>
-              <TotalValue value={total} />
-            </Header>
+            <PortfolioHeader total={total} onEdit={this.handleEditOpen} />
             <HoldingsTable
               holdings={holdings}
               coins={coins}
@@ -109,17 +85,16 @@ class Portfolio extends Component {
             />
           </Paper>
         </Grid>
-      </Container>
+      </PortfolioContainer>
     );
   }
 }
 
-function mapStateToProps({ coins, prices, holdings, ui }) {
+function mapStateToProps({ coins, prices, holdings }) {
   return {
     coins,
     prices,
     holdings,
-    ui,
   };
 }
 
