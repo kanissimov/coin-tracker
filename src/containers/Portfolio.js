@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
 import { fetchMeta } from '../actions/coins';
 import { fetchPrices } from '../actions/prices';
 import { addHolding, updateHolding, removeHolding } from '../actions/holdings';
@@ -10,6 +8,7 @@ import EditDialog from '../components/EditDialog';
 import HoldingsTable from '../components/HoldingsTable';
 import PortfolioHeader from '../components/PortfolioHeader';
 import PortfolioContainer from '../components/PortfolioContainer';
+import HoldingsContainer from '../components/HoldingsContainer';
 import { REFRESH_INTERVAL } from '../constants';
 
 class Portfolio extends Component {
@@ -74,17 +73,15 @@ class Portfolio extends Component {
           onClose={this.handleEditCancel}
           options={coinOptions}
         />
-        <Grid item>
-          <Paper>
-            <PortfolioHeader total={total} onEdit={this.handleEditOpen} />
-            <HoldingsTable
-              holdings={holdings}
-              coins={coins}
-              prices={prices}
-              onEdit={this.handleEditOpen}
-            />
-          </Paper>
-        </Grid>
+        <HoldingsContainer>
+          <PortfolioHeader total={total} onEdit={this.handleEditOpen} />
+          <HoldingsTable
+            holdings={holdings}
+            coins={coins}
+            prices={prices}
+            onEdit={this.handleEditOpen}
+          />
+        </HoldingsContainer>
       </PortfolioContainer>
     );
   }
